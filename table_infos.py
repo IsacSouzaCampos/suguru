@@ -11,7 +11,7 @@ TABLE_DESIGN = [0, 0, 0, 1, 2, 2, 3, 3,
                 10, 10, 12, 12, 12, 12, 11, 11]
 
 x = -1
-TABLE = [x, x, x, 3, x, x, 2, x,
+table = [x, x, x, 3, x, x, 2, x,
          4, x, x, x, x, x, x, x,
          x, 2, x, x, x, x, x, x,
          x, 1, 5, x, x, 1, 5, x,
@@ -23,8 +23,8 @@ TABLE = [x, x, x, 3, x, x, 2, x,
 SIZE = sqrt(len(table))
 
 
-num_of_boxes = max(table_design) + 1
+num_of_boxes = max(TABLE_DESIGN) + 1
 BOXES_SIZE = {}
 
 for i in range(num_of_boxes):
-    BOXES_SIZE[i] = table_design.count(i)
+    BOXES_SIZE[i] = TABLE_DESIGN.count(i)
