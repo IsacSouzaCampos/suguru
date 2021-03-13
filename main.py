@@ -1,17 +1,14 @@
-from table_infos import SIZE, BOXES_SIZE, TABLE_DESIGN, table
+from table_infos import SIZE, _SIZE, BOXES_SIZE, BOXES_POSITIONS, TABLE_DESIGN, table
 
 
 def print_table():
-    for i in range(SIZE):
-        for j in range(SIZE):
-            if (j % 3) == 2:
-                print(table[(i * SIZE) + j], '    ', end='')
+    for i in range(1, _SIZE - 1):  # 1, _SIZE - 1
+        for j in range(1, _SIZE - 1):
+            if table[(i * _SIZE) + j] >= 0:
+                print('', table[(i * _SIZE) + j], '    ', end='')
             else:
-                print(table[(i * SIZE) + j], ' ', end='')
-        if (i % 3) == 2:
-            print('\n')
-        else:
-            print()
+                print(table[(i * _SIZE) + j], '    ', end='')
+        print()
 
 
 def is_table_complete():
@@ -23,47 +20,25 @@ def is_table_complete():
 
 
 def is_neighborhood_clean(i, j, v):
-    s = SIZE - 1
-    if i == 0 and j == 0:
-        # topo esquerdo
-        pass
-    elif i == 0 and j == s:
-        # topo direito
-        pass
-    elif i == s and j == s:
-        # fundo direito
-        pass
-    elif i == s and j == 0:
-        # fundo esquerdo
-        pass
-    elif i == 0:
-        # topo
-        pass
-    elif j == s:
-        # direita
-        pass
-    elif i == s:
-        # fundo
-        pass
-    elif j == 0:
-        # esquerda
-        pass
-
-
-def is_box_clean(i, j, v):
-    _i = (i // 3) * 3
-    _j = (j // 3) * 3
-
-    for r in range(_i, (_i + 3)):
-        for c in range(_j, (_j + 3)):
-            if table[(r * SIZE) + c] == v:
+    for _i in range((i - 1), (i + 2)):
+        for _j in range((j - 1), (j + 2)):
+            # print(i, j, '-', _i, _j)
+            if table[(_i * _SIZE) + _j] == v:
                 return False
     return True
 
 
+def is_box_clean(n, v):
+    for i in BOXES_POSITIONS[TABLE_DESIGN[n]]:
+        # print(i, end=' ')
+        if table[i] == v:
+            return False
+    return True
+
+
 def next_position(n):
-    while n < (SIZE * SIZE):
-        if table[n] < 0:
+    while n < (_SIZE * _SIZE):
+        if table[n] == -1:
             return n
         n += 1
     return -1
@@ -71,11 +46,15 @@ def next_position(n):
 
 def set_position(n):
     print('.')
-    i = n // SIZE
-    j = n % SIZE
+    i = (n // _SIZE)
+    j = (n % _SIZE)
 
-    for v in range(1, BOXES_SIZE):
-        if is_neighborhood_clean(i, j, v) and is_box_clean(i, j, v):
+    # print(n, TABLE_DESIGN[n])
+    # print_table()
+    # print('*'*40)
+
+    for v in range(1, BOXES_SIZE[TABLE_DESIGN[n]] + 1):
+        if is_neighborhood_clean(i, j, v) and is_box_clean(n, v):
             table[n] = v
             _next = next_position(n)
             if _next < 0:
@@ -83,7 +62,8 @@ def set_position(n):
             if set_position(_next):
                 return True
 
-    table[i][j] = -1
+    # print('settou pra -1', (i * SIZE) + j, n)
+    table[n] = -1
     return False
 
 
